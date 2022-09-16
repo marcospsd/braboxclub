@@ -16,8 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users.urls import routeruser
+from clientes.urls import clientrouter
+from financeiro.urls import finanrouter
+from produtos.urls import prodrouter
+from vendas.urls import vendasrouter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include(routeruser.urls))
+    path('auth/', include(routeruser.urls)),
+    path('clientes/', include(clientrouter.urls)),
+    path('financeiro/', include(finanrouter.urls)),
+    path('produtos/', include(prodrouter.urls)),
+    path('vendas/', include(vendasrouter.urls)),
 ]
