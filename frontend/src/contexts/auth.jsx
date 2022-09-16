@@ -33,8 +33,8 @@ export const AuthProvicer = ({children}) => {
     const login = async (username, password) => {
             api.post('/auth/', { username, password})
             .then(( res ) => {
-                const token = response.data.token
-                const coduser = response.data.coduser
+                const token = res.data.token
+                const coduser = res.data.coduser
                 localStorage.setItem("token", token);
                 localStorage.setItem("coduser", JSON.stringify(coduser));
                 api.defaults.headers.Authorization = `token ${token}`
@@ -60,6 +60,6 @@ export const AuthProvicer = ({children}) => {
     };
 
     return (
-        <AuthContext.Provider value={{ authenticated: !!user, user, loading, login, logout }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ authenticated: !!user, user, loading, login, logout, error }}>{children}</AuthContext.Provider>
     )
 }

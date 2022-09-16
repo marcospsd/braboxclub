@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import HomePage from '../pages/HomePage'
 import LoginPage from '../pages/Login'
-import { AuthContext } from '../contexts/auth'
+import { AuthContext, AuthProvicer } from '../contexts/auth'
 
 const AppRoutes = () => {
     const Private = ({children}) =>{
