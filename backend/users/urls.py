@@ -19,7 +19,7 @@ from rest_framework.routers import SimpleRouter
 
 
 routeruser = SimpleRouter()
-routeruser.register('', CreateUserView)
+routeruser.register('register', CreateUserView)
 
 
 urlpatterns = [

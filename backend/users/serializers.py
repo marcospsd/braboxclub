@@ -3,18 +3,18 @@ from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['username', 'first_name', 'password', 'id']
+        fields_ready = ['id']
 
-    def create(self, validated_data):
-        conta = User.objects.create(
+    def save(self):
+        conta = User(
             username=self.validated_data['username'],
-            first_name=(self.validated_data['first_name']).title(),
-            email=self.validated_data['email'],
+            first_name=self.validated_data['first_name']            
         )
         senha = self.validated_data['password']
         conta.set_password(senha)
         conta.save()
-        return conta
+        return print(conta)

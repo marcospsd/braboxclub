@@ -1,8 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {api } from "../services/api";
-
-
+import { api } from "../services/api";
 
 
 export const AuthContext = createContext();
@@ -15,39 +13,40 @@ export const AuthProvicer = ({children}) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        setUser(null)
         const token = localStorage.getItem('token');
         const coduser = localStorage.getItem('coduser');
-
-        if(token) {
+        if(token && coduser) {
             api.defaults.headers.Authorization = `token ${token}`
-            api.get(`/auth/${coduser}/`)
+            api.get(`/auth/register/${coduser}/`)
             .then((res) => {
-                setUser(res)
+                setUser(res.data)
+                setLoading(false)
             })
-            
         }
-        setLoading(false);
     }, []);
 
 
-    const login = async (username, password) => {
-            api.post('/auth/', { username, password})
+    const login = async (credenciais) => {
+            api.post('/auth/', credenciais )
             .then(( res ) => {
                 const token = res.data.token
-                const coduser = res.data.coduser
+                const coduser = res.data.iduser
                 localStorage.setItem("token", token);
                 localStorage.setItem("coduser", JSON.stringify(coduser));
                 api.defaults.headers.Authorization = `token ${token}`
-                api.get(`/auth/${coduser}/`)
+                api.get(`/auth/register/${coduser}/`)
                 .then((res) => {
-                    setUser(res)
+                    setUser(res.data)
+                    setLoading(false)
                     navigate("/")
                 })
                 
             })
             .catch((err) => {
-                setError(err)
+                setError(err.response.data)
             })
+            return error
 
     };
     
