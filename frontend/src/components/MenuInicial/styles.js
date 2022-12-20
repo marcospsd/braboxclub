@@ -37,20 +37,23 @@ export const FunctionsPage = styled.div`
     flex-direction: row;
     width: 100%;
     height: 100%;
-    margin-left: 1.5rem;
+    margin-left: 0.5rem;
     background-color: black;
     border-radius: 1.5rem;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     overflow: auto;
+
+    @media (min-width: 700px) {
+     justify-content: center;
+    }
 
     :-webkit-scrollbar {
     width: 0px;
     }
 
     > button {
-        display: flex;
-        margin: 0rem 1rem;
+        margin: 0rem;
         flex-direction: column;
         p {
             margin: 0;

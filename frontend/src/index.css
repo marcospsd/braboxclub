@@ -14,3 +14,22 @@ code {
 body, html{
   background-color: black;
 }
+
+#box-modal-create-user {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 320px;
+  height: 90%;
+  max-width: 90%;
+  max-height: 600px;
+  background: whitesmoke;
+  border: 2px solid #000;
+  size: 4;
+  color: rgb(0, 0, 0);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  
+}
+

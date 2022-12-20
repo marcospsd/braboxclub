@@ -4,9 +4,8 @@ export const BigConteiner = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 100%;
     height: 100vh;
+
 
     @media (max-width: 800px) {
         flex-direction: column;
@@ -31,11 +30,11 @@ export const Container = styled.div`
     background-color: whitesmoke;
     width: 100%;
     height: 100%;
-    border: 0.2rem solid;
+    border: 0.1rem solid;
     border-radius: 1.5rem;
 
     @media (max-width: 800px) {
-        width: 100%;
+        width: 95%;
 
     }
 
@@ -54,6 +53,30 @@ export const Container = styled.div`
     }
 
 `
+
+export const Container2 = styled.div`
+
+    @media (max-width: 800px) {
+        width: 95%;
+
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    .MuiTextField-root, .MuiFormControl-root {
+        margin: 0.5rem 0.5rem 0 0;
+        width: 100%;
+    }
+
+    hr {
+        width: 90%;
+
+    }
+
+`
+
 
 export const Row = styled.div`
     display: flex;
@@ -91,4 +114,22 @@ export const Bloco = styled.div`
         padding: 0;
     }
 
+`
+
+
+export const CardCliente = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 10vh;
+    border-radius: 1.5rem;
+    background-color: #f0f0f0;
+    align-items: center;
+    justify-content: space-around;
+
+
+    p {
+        font-size: 1rem;
+        margin: 0rem;
+    }
 `

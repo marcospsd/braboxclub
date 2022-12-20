@@ -10,24 +10,11 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 
 
-const statecli = {
-    nome: "",
-    apelido: "",
-    cpf: "",
-    celular: "",
-    cep: "",
-    rua: "",
-    bairro: "",
-    cidade: "",
-    estado: ""
-}
 
-
-const Cadastro = ({ state, setState, opencreate, setOpenCreate}) => {
-    const [data, setData] = useState(statecli)
+const EditCadastro = ({ state, setState, opencreate, setOpenCreate}) => {
+    const [data, setData] = useState(state.clientedados)
     const [alert, setAlert] = useState({ open: false, texto: "", tipoalert: "warning"})
     const [buttonblock, setButtonBlock] = useState(false)
-    console.log(data)
     const BuscarCEP = (cep) => {
         axios.get(`https://viacep.com.br/ws/${cep}/json/`)
         .then((res) => {
@@ -167,9 +154,9 @@ const Cadastro = ({ state, setState, opencreate, setOpenCreate}) => {
                         <Button sx={{ color: 'white', background: 'black' }} disabled={buttonblock}
                                             onClick={() => {
                                                 setButtonBlock(true)
-                                                api.post('/clientes/clientes/', data)
+                                                api.put(`/clientes/clientes/${data.id}/`, data)
                                                 .then((res) => {
-                                                    setData(statecli)
+                                                    setData(res.data)
                                                     setState({...state, clientedados: res.data, cliente: res.data.id})
                                                     setOpenCreate(!opencreate)
                                                 })
@@ -181,7 +168,7 @@ const Cadastro = ({ state, setState, opencreate, setOpenCreate}) => {
                                                 })
                                                 
                                             }}
-                        >Criar</Button>
+                        >Atualizar</Button>
                         <br/>
                 </Container2>
             </Box>
@@ -189,4 +176,4 @@ const Cadastro = ({ state, setState, opencreate, setOpenCreate}) => {
     )
 }
 
-export default Cadastro;
+export default EditCadastro;

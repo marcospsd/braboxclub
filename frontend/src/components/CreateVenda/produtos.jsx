@@ -6,18 +6,31 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Autocomplete from '@mui/material/Autocomplete';
 import AddIcon from '@mui/icons-material/Add';
 import PercentIcon from '@mui/icons-material/Percent';
+import CardProducts from '../CardProducts';
 
 
-const Produtos = () => {
+const stado1 = {
+    codigo: "", 
+    valor_venda: 0, 
+    valor_produto: 0, 
+    descricao: "", 
+    desconto: 0
+}
+
+
+
+const Produtos = ({ data, setData }) => {
     const [ keyautocomplete, setKeyAutocomplete] = useState(false)
     const [ pesquisa, setPesquisa] = useState("")
     const [ resultado, setResultado] = useState([])
-    const [ data, setData ] = useState({ codigo: "", valor_venda: 0, valor_produto: 0, descricao: "", desconto: 0}) 
+    const [ state, setState ] = useState(stado1)
+    const [ id, setId] = useState(1)
+
 
     const BuscarProduto = (x) => {
         setPesquisa(x)
         if (x !== "") {
-            api.get(`/produtos/produtos/${x}`)
+            api.get(`/produtos/produtos/`)
             .then((res) => {
                 if (Array.isArray(res.data)){
                     setResultado(res.data) 
@@ -31,9 +44,9 @@ const Produtos = () => {
                 try {
                     const porcento = id/100
                     const produto = 1-porcento
-                    setData({...data, valor_venda: Math.round((data.valor_produto*produto))})
+                    setState({...state, valor_venda: Math.round((state.valor_produto*produto))})
                 } catch { 
-                    setData({...data, valor_venda: 0, desconto: 0})
+                    setState({...state, valor_venda: 0, desconto: 0})
                 }
         }
         }
@@ -41,13 +54,36 @@ const Produtos = () => {
         const ValuetoDesc = (id) => {
             if (id !== "") {
                 try {
-                const porcento = (1 - (data.valor_venda / data.valor_produto )) * 100
-                setData({...data, desconto: Math.round(porcento)})
+                const porcento = (1 - (state.valor_venda / state.valor_produto )) * 100
+                setState({...state, desconto: Math.round(porcento)})
                 } catch {
-                setData({...data, valor_venda: 0, desconto: 0})
+                    setState({...state, valor_venda: 0, desconto: 0})
             }
         }
     }
+
+
+    const AddItem = () => {
+        if (state.descricao) {
+        setData({...data, corpovenda : [...data.corpovenda, {
+                                        id: id,     
+                                        codigo: state.codigo, 
+                                        valor_venda: state.valor_produto, 
+                                        valor_produto: state.valor_venda, 
+                                        descricao: state.descricao, 
+                                        desconto: state.desconto }]})
+        setState(stado1)
+        setKeyAutocomplete(!keyautocomplete)
+        setId(id+1)
+        }
+    } 
+
+    const deleteCard = (id) => {
+        const newData = data.corpovenda.filter((res) => res.id !== id)
+        setData({...data, corpovenda: newData})
+    }
+
+    console.log(resultado)
 
     return (
         <Container>
@@ -62,7 +98,7 @@ const Produtos = () => {
                         getOptionLabel={(resultados) => `${resultados.descricao} - R$ ${resultados.valor_venda}`}
                         onChange = {(resultado, newResultado) => {
                             if (newResultado) {
-                                setData({
+                                setState({
                                     codigo: newResultado.codigo,
                                     valor_produto: newResultado.valor_venda,
                                     valor_venda: newResultado.valor_venda,
@@ -79,14 +115,14 @@ const Produtos = () => {
                         options={resultado}
                         renderInput={(params) => <TextField {...params} label="Pesquise pela Descrição do Produto" onChange={(e) => BuscarProduto(e.target.value)} value={pesquisa}/>}
                         />
-                    <IconButton>
+                    <IconButton onClick={() => AddItem()}>
                         <AddIcon/>
                     </IconButton>
             </Row>
             
             <Row>
-                <TextField value={data.descricao} label='Descricão' size="small" disabled/>
-                <TextField value={parseInt(data.valor_produto)} label="Valor do Sistema" size="small" disabled
+                <TextField value={state.descricao} label='Descricão' size="small" disabled/>
+                <TextField value={parseInt(state.valor_produto)} label="Valor do Sistema" size="small" disabled
                                         InputProps={{
                                             startAdornment: (
                                                     <InputAdornment sx={{ paddingRight: '3px'}}>R$ </InputAdornment>
@@ -94,8 +130,8 @@ const Produtos = () => {
                 />
             </Row>
             <Row>
-                <TextField value={data.desconto} onBlur={(e) => DesctoValue(e.target.value)} size="small" label="Desconto"
-                    onChange={(e) => setData({...data, desconto: e.target.value})}
+                <TextField value={state.desconto ? parseInt(state.desconto) : 0} onBlur={(e) => DesctoValue(e.target.value)} size="small" label="Desconto"  type="number"
+                    onChange={(e) => setState({...state, desconto: e.target.value})}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment>
@@ -103,8 +139,8 @@ const Produtos = () => {
                             </InputAdornment>
                         )}}
                 />
-                <TextField value={parseInt(data.valor_venda)} label="Valor da Venda" size="small" 
-                            onChange={(e) => setData({...data, valor_venda: e.target.value})}
+                <TextField value={parseInt(state.valor_venda)} label="Valor da Venda" size="small" type="number"
+                            onChange={(e) => setState({...state, valor_venda: e.target.value})}
                                         onBlur={(e) => ValuetoDesc(e.target.value)} 
                                         InputProps={{
                                             startAdornment: (
@@ -113,6 +149,11 @@ const Produtos = () => {
                 />
             </Row>
             <hr/>
+            <br/>
+            {data.corpovenda && 
+                data.corpovenda.map((res) =>(
+                    <CardProducts key={res.id} card={res} deleteCard={deleteCard}/>
+                ))}
         </Container>
     )
 }

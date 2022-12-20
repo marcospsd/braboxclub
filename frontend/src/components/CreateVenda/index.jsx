@@ -1,17 +1,17 @@
 import React, {useState} from 'react'
-import Cadastro from './cadastro'
+import Cliente from './cliente'
 import Produtos from './produtos'
 import FormPag from './formapag'
 import { BigConteiner } from './styles'
 
 
 const state = {
-        id: 1,
         corpovenda: [],
         formapag: [],
         clientedados: {
             id: "",
             nome: "",
+            apelido: "",
             cpf: "",
             celular: "",
             email: "",
@@ -33,9 +33,9 @@ const CreateVenda = () => {
 
     return (
         <BigConteiner>
-            <Cadastro state={data} setState={setData}/>
-            <Produtos state={data} setState={setData}/>
-            <FormPag state={data} setState={setData}/> 
+            <Cliente data={data} setData={setData}/><br/>
+            <Produtos data={data} setData={setData}/><br/>
+            <FormPag data={data} setData={setData}/> 
         </BigConteiner>
     )
 }

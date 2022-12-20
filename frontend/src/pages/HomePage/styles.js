@@ -12,12 +12,17 @@ export const Container = styled.div`
 export const ContainerHome = styled.div`
     display: flex;
     flex-direction: column;
-    width: 80vw;
-    height: 80vh;
+    width: 90vw;
+    height: 90vh;
     background-color: whitesmoke;
     border-radius: 2rem;
-    padding: 1.5rem;
+    padding: 0.5rem;
     text-align: center;
+
+    @media (min-width:800px) {
+     width : 80vw;
+     height: 80vh;
+    }
 
     > button {
         align-self: center;

@@ -14,10 +14,10 @@ const HeaderPrincipal = ({ name, page, setPage }) => {
     return (
         <Container>
             <img src={IMGLogo} onClick={() => setPage(0)}/>
-            <Bloco>
+            {/* <Bloco>
                 <p>Operador:</p>
                 <p>{name}</p>
-            </Bloco>
+            </Bloco> */}
             <FunctionsPage>
                 <IconButton onClick={() => setPage(1)}>
                     <AddShoppingCartIcon sx={{ fontSize: 40, color: 'white' }}/>

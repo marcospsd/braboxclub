@@ -8,29 +8,42 @@ import IconButton  from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import FormControl from '@mui/material/FormControl';
+import CardFormaPag from '../CardFormaPag'
 import { Container, Bloco, Row } from './styles'
+import { FormatReal } from '../Functions';
 
 
-const FormPag = () => {
+const FormPag = ({ data, setData }) => {
     const [forma, setForma] = useState("DH")
     const [parcela, setParcela]= useState(1)
     const [valor, setValor] = useState(0)
+    const quantidadevendas = data.corpovenda ? data.corpovenda.map(x => x).length : 0
+    const total_venda = data.corpovenda ? data.corpovenda.map(x => x.valor_venda).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
+    // const saldo = data.corpovenda ? (data.corpovenda.map(x => x.valor_venda).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (data.formpag.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
 
+    console.log(data)
+    const AddCard = () => {
+        return
+    }
+
+    const deleteCard = () => {
+        return
+    }
     return (
         <Container>
             <h1>Forma de Pagamento</h1>
             <Row>
                 <Bloco>
                     <p>Total Venda</p>
-                    <p>R$ 500,00</p>
+                    <p>{FormatReal(total_venda)}</p>
                 </Bloco>
                 <Bloco>
                     <p>Saldo a Receber</p>
-                    <p>R$ 500,00</p>
+                    <p>{FormatReal(total_venda)}</p>
                 </Bloco>
                 <Bloco>
                     <p>Quantidade de Prod.</p>
-                    <p>5</p>
+                    <p>{quantidadevendas}</p>
                 </Bloco>
             </Row>
             <br/>
@@ -79,11 +92,17 @@ const FormPag = () => {
                         </Select>
                     </FormControl>
                 <TextField label="Valor" size="small" value={valor} onChange={(e) => setValor(e.target.value)}/>  
-                <IconButton>
+                <IconButton onClick={() => AddCard()}>
                     <AddCardIcon/>
                 </IconButton> 
             </Row>
-
+            <hr/>
+            { data?.formapag && 
+                data.formapag.map((res) => (
+                    <CardFormaPag card={res} deleteCard={deleteCard} />
+                ))
+            }
+                
             
         </Container>
     )
