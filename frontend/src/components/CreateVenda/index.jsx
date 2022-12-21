@@ -35,7 +35,7 @@ const CreateVenda = () => {
         <BigConteiner>
             <Cliente data={data} setData={setData}/><br/>
             <Produtos data={data} setData={setData}/><br/>
-            <FormPag data={data} setData={setData}/> 
+            <FormPag data={data} setData={setData} stateinit={state}/> 
         </BigConteiner>
     )
 }

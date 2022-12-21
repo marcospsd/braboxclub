@@ -20,6 +20,8 @@ const HomePage = () => {
                 return <p>Primeira Pagina</p>
             case 1:
                 return <CreateVenda/>
+            case 2:
+                return <VendasViewList />
         }
 
     }

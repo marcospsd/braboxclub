@@ -2,35 +2,56 @@ import React, {useState} from 'react'
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import AlertText from '../Alerts'
 import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
 import IconButton  from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import FormControl from '@mui/material/FormControl';
-import CardFormaPag from '../CardFormaPag'
 import { Container, Bloco, Row } from './styles'
 import { FormatReal } from '../Functions';
+import ListFormPag from '../ListFormPag';
+import { Button } from '@mui/material';
+import { api } from '../../services/api';
 
 
-const FormPag = ({ data, setData }) => {
+
+const FormPag = ({ data, setData, stateinit }) => {
+    const [disablebutton, setDisableButton] = useState(false)
+    const [alert, setAlert] = useState({open: false, texto: "", tipoalert: "warning"})
     const [forma, setForma] = useState("DH")
     const [parcela, setParcela]= useState(1)
     const [valor, setValor] = useState(0)
+    const [key, setKey] = useState(1)
     const quantidadevendas = data.corpovenda ? data.corpovenda.map(x => x).length : 0
-    const total_venda = data.corpovenda ? data.corpovenda.map(x => x.valor_venda).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
-    // const saldo = data.corpovenda ? (data.corpovenda.map(x => x.valor_venda).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (data.formpag.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
+    const total_venda = data.corpovenda ? data.corpovenda.map(x => x.valor_final).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
+    const saldo = data.corpovenda ? (data.corpovenda.map(x => x.valor_final).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (data.formapag ? data.formapag.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0) : 0
 
-    console.log(data)
     const AddCard = () => {
-        return
+        if (valor > 0){
+        setData({...data, valor_total: total_venda, formapag: [...data.formapag, {
+            formapag: forma,
+            parcelas: parcela,
+            valor: valor,
+            id: key
+        }]})
+        setKey(key+1)
+        setForma("DH")
+        setParcela(1)
+        setValor(0)
+    } else {
+        setAlert({open: true, texto: 'o Valor de pagamento não pode ser zerado', tipoalert: "warning"})
+    }
+}
+
+    const deleteCard = (id) => {
+        const NewData = data.formapag.filter((res) => res.id != id)
+        setData({...data, formapag: NewData})
     }
 
-    const deleteCard = () => {
-        return
-    }
+
     return (
         <Container>
+            <AlertText data={alert} close={() => setAlert({...alert, open: !alert.open})} />
             <h1>Forma de Pagamento</h1>
             <Row>
                 <Bloco>
@@ -39,7 +60,7 @@ const FormPag = ({ data, setData }) => {
                 </Bloco>
                 <Bloco>
                     <p>Saldo a Receber</p>
-                    <p>{FormatReal(total_venda)}</p>
+                    <p>{FormatReal(saldo)}</p>
                 </Bloco>
                 <Bloco>
                     <p>Quantidade de Prod.</p>
@@ -98,12 +119,28 @@ const FormPag = ({ data, setData }) => {
             </Row>
             <hr/>
             { data?.formapag && 
-                data.formapag.map((res) => (
-                    <CardFormaPag card={res} deleteCard={deleteCard} />
-                ))
+                <ListFormPag data={data.formapag} deleteCard={deleteCard}/>
             }
                 
-            
+            <br/>
+            <Button variant='contained' disabled={disablebutton} onClick={() => {
+                if(saldo > 0) return setAlert({...alert, open: true, texto: "Falta saldo para finalização do pagameto"})
+                if(saldo < 0) return setAlert({...alert, open: true, texto: "Forma de pagamento maior que o valor total da venda, favor verificar."})
+                setDisableButton(true)
+                api.post('/vendas/vendas/', data)
+                .then((res) => {
+                    setAlert({open: true, tipoalert: 'success', texto: `Venda gerada com sucesso, OS: ${res.id}`})
+                    setData(stateinit)
+                })
+                .catch((err) => {
+                    setAlert({open: true, tipoalert: 'warning', texto: JSON.stringify(err.response.data)})
+                })
+                .finally((x) => {
+                    setDisableButton(false)
+                })
+                
+
+            }}>Gerar Venda</Button>
         </Container>
     )
 }

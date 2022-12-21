@@ -7,7 +7,7 @@ from datetime import date
 
 class Vendas(models.Model):
     cliente = models.ForeignKey(Clientes, related_name='vendascliente', on_delete=models.CASCADE)
-    emissao = models.DateField(default=date.today())
+    emissao = models.DateField(default=date.today)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
 class Corpo_venda(models.Model):
@@ -15,6 +15,7 @@ class Corpo_venda(models.Model):
     produto = models.ForeignKey(Produtos, related_name='produto_corpovenda', on_delete=models.CASCADE)
     valor_unit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     valor_final = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    desconto = models.IntegerField(default=0)
     
     
 formas = (

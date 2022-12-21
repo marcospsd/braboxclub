@@ -4,7 +4,7 @@ export const BigConteiner = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 100vh;
+    height: 80%;  
 
 
     @media (max-width: 800px) {
@@ -32,6 +32,8 @@ export const Container = styled.div`
     height: 100%;
     border: 0.1rem solid;
     border-radius: 1.5rem;
+   
+  
 
     @media (max-width: 800px) {
         width: 95%;
@@ -50,6 +52,17 @@ export const Container = styled.div`
     hr {
         width: 90%;
 
+    }
+
+    > button {
+        align-self: center;
+        width: 200px;
+        background-color: #000;
+
+        :hover{
+            color: black;
+            background-color: #fff;
+        }
     }
 
 `
@@ -121,15 +134,27 @@ export const CardCliente = styled.div`
     display: flex;
     flex-direction: column;
     width: 80%;
-    height: 10vh;
     border-radius: 1.5rem;
     background-color: #f0f0f0;
     align-items: center;
     justify-content: space-around;
+    padding: 0.8rem 0;
 
 
     p {
         font-size: 1rem;
         margin: 0rem;
     }
+`
+
+export const ContainerCards = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    height: 50%;
+    overflow: auto;
+
+    :-webkit-scrollbar {
+        width: 0px;
+        }
 `

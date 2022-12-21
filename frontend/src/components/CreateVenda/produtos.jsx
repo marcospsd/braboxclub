@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Row } from './styles'
+import { Container, Row, ContainerCards } from './styles'
 import { api } from '../../services/api'
 import { IconButton, TextField } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,8 +11,8 @@ import CardProducts from '../CardProducts';
 
 const stado1 = {
     codigo: "", 
-    valor_venda: 0, 
-    valor_produto: 0, 
+    valor_final: 0, 
+    valor_unit: 0, 
     descricao: "", 
     desconto: 0
 }
@@ -26,11 +26,10 @@ const Produtos = ({ data, setData }) => {
     const [ state, setState ] = useState(stado1)
     const [ id, setId] = useState(1)
 
-
     const BuscarProduto = (x) => {
         setPesquisa(x)
         if (x !== "") {
-            api.get(`/produtos/produtos/`)
+            api.get(`/produtos/produtos/${x}`)
             .then((res) => {
                 if (Array.isArray(res.data)){
                     setResultado(res.data) 
@@ -44,9 +43,9 @@ const Produtos = ({ data, setData }) => {
                 try {
                     const porcento = id/100
                     const produto = 1-porcento
-                    setState({...state, valor_venda: Math.round((state.valor_produto*produto))})
+                    setState({...state, valor_final: Math.round((state.valor_unit*produto))})
                 } catch { 
-                    setState({...state, valor_venda: 0, desconto: 0})
+                    setState({...state, valor_final: 0, desconto: 0})
                 }
         }
         }
@@ -54,10 +53,10 @@ const Produtos = ({ data, setData }) => {
         const ValuetoDesc = (id) => {
             if (id !== "") {
                 try {
-                const porcento = (1 - (state.valor_venda / state.valor_produto )) * 100
+                const porcento = (1 - (state.valor_final / state.valor_unit )) * 100
                 setState({...state, desconto: Math.round(porcento)})
                 } catch {
-                    setState({...state, valor_venda: 0, desconto: 0})
+                    setState({...state, valor_final: 0, desconto: 0})
             }
         }
     }
@@ -67,9 +66,9 @@ const Produtos = ({ data, setData }) => {
         if (state.descricao) {
         setData({...data, corpovenda : [...data.corpovenda, {
                                         id: id,     
-                                        codigo: state.codigo, 
-                                        valor_venda: state.valor_produto, 
-                                        valor_produto: state.valor_venda, 
+                                        produto: state.produto, 
+                                        valor_final: state.valor_final, 
+                                        valor_unit: state.valor_unit, 
                                         descricao: state.descricao, 
                                         desconto: state.desconto }]})
         setState(stado1)
@@ -83,7 +82,6 @@ const Produtos = ({ data, setData }) => {
         setData({...data, corpovenda: newData})
     }
 
-    console.log(resultado)
 
     return (
         <Container>
@@ -98,10 +96,11 @@ const Produtos = ({ data, setData }) => {
                         getOptionLabel={(resultados) => `${resultados.descricao} - R$ ${resultados.valor_venda}`}
                         onChange = {(resultado, newResultado) => {
                             if (newResultado) {
+                               
                                 setState({
-                                    codigo: newResultado.codigo,
-                                    valor_produto: newResultado.valor_venda,
-                                    valor_venda: newResultado.valor_venda,
+                                    produto: newResultado.id,
+                                    valor_unit: newResultado.valor_venda,
+                                    valor_final: newResultado.valor_venda,
                                     descricao: newResultado.descricao
                                 })
                                 setResultado([])
@@ -122,7 +121,7 @@ const Produtos = ({ data, setData }) => {
             
             <Row>
                 <TextField value={state.descricao} label='Descricão' size="small" disabled/>
-                <TextField value={parseInt(state.valor_produto)} label="Valor do Sistema" size="small" disabled
+                <TextField value={parseInt(state.valor_unit)} label="Valor do Sistema" size="small" disabled
                                         InputProps={{
                                             startAdornment: (
                                                     <InputAdornment sx={{ paddingRight: '3px'}}>R$ </InputAdornment>
@@ -139,8 +138,8 @@ const Produtos = ({ data, setData }) => {
                             </InputAdornment>
                         )}}
                 />
-                <TextField value={parseInt(state.valor_venda)} label="Valor da Venda" size="small" type="number"
-                            onChange={(e) => setState({...state, valor_venda: e.target.value})}
+                <TextField value={parseInt(state.valor_final)} label="Valor da Venda" size="small" type="number"
+                            onChange={(e) => setState({...state, valor_final: e.target.value})}
                                         onBlur={(e) => ValuetoDesc(e.target.value)} 
                                         InputProps={{
                                             startAdornment: (
@@ -150,10 +149,12 @@ const Produtos = ({ data, setData }) => {
             </Row>
             <hr/>
             <br/>
+            <ContainerCards>
             {data.corpovenda && 
                 data.corpovenda.map((res) =>(
                     <CardProducts key={res.id} card={res} deleteCard={deleteCard}/>
                 ))}
+            </ContainerCards>
         </Container>
     )
 }

@@ -26,6 +26,7 @@ urlpatterns = [
     path('auth/', include(routeruser.urls)),
     path('auth/', include('users.urls')),
     path('clientes/', include(clientrouter.urls)),
+    path('clientes/', include('clientes.urls')),
     path('financeiro/', include(finanrouter.urls)),
     path('produtos/', include(prodrouter.urls)),
     path('produtos/', include('produtos.urls')),

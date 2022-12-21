@@ -7,6 +7,7 @@ import { IconButton, TextField } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import { api } from '../../services/api';
+import { FormatTel } from '../Functions'
 
 
 
@@ -19,7 +20,7 @@ const Cliente = ({data, setData}) => {
     const [openedit, setOpenEdit] = useState(false)
 
     const BuscarCliente = (ndata) => {
-        api.get(`/clientes/clientes/`)
+        api.get(`/clientes/clientesearch/${ndata}`)
         .then((res)=>{
             setResultado(res.data)
         })
@@ -45,7 +46,7 @@ const Cliente = ({data, setData}) => {
                                 })
                                 setResultado([])
                                 setPesquisa("")
-                                setKeyAutocomplete(true)
+                                setKeyAutocomplete(!keyautocomplete)
                             }
                             else { setPesquisa("") }
                             
@@ -69,6 +70,7 @@ const Cliente = ({data, setData}) => {
                     {
                         data.clientedados.nome && 
                             <CardCliente>
+                                <h3>Cliente Selecionado</h3>
                                 <Row>
                                     <p><b>Nome:</b></p>
                                     <p> {data?.clientedados.nome}</p>
@@ -79,8 +81,21 @@ const Cliente = ({data, setData}) => {
                                 </Row>
                                 <Row>
                                     <p><b>Telefone:</b></p>
-                                    <p>{data?.clientedados.telefone ? data.clientedados.telefone : "Não possui"}</p>
+                                    <p>{data?.clientedados.celular ? FormatTel(data.clientedados.celular) : "Não possui"}</p>
                                 </Row>
+                                <Row>
+                                    <p><b>Email:</b></p>
+                                    <p>{data?.clientedados.email ? data.clientedados.email : "Não possui"}</p>
+                                </Row>
+                                <Row>
+                                    <p><b>Cidade:</b></p>
+                                    <p>{data?.clientedados.cidade ? data.clientedados.cidade : "Não possui"}</p>
+                                </Row>
+                                <Row>
+                                    <p><b>Rua:</b></p>
+                                    <p>{data?.clientedados.rua ? data.clientedados.rua : "Não informado"}</p>
+                                </Row>
+
                             </CardCliente>
                     }
                     <br/>

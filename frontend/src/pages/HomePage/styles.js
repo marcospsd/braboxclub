@@ -19,6 +19,7 @@ export const ContainerHome = styled.div`
     padding: 0.5rem;
     text-align: center;
 
+
     @media (min-width:800px) {
      width : 80vw;
      height: 80vh;

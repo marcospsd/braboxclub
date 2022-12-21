@@ -15,7 +15,7 @@ const CardProducts = ({ card, deleteCard }) => {
             </IconButton>
             <Row>
                 <p><b>Codigo:</b></p>
-                <p>{card.id}</p>
+                <p>{card.produto}</p>
             </Row>
             <Row>
                 <p><b>Descrição:</b></p>
@@ -23,11 +23,11 @@ const CardProducts = ({ card, deleteCard }) => {
             </Row>
             <Row>
                 <p><b>Valor:</b></p>
-                <p>{FormatReal(card.valor_venda)}</p>
+                <p>{FormatReal(card.valor_final)}</p>
             </Row>
             <Row>
                 <p><b>Desconto:</b></p>
-                <p>{card.desconto} %</p>
+                <p>{card.desconto? card.desconto : 0} %</p>
             </Row>
         </Container>
     )

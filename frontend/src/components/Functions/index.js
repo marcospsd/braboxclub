@@ -13,10 +13,8 @@ export const FormatFormaPag = (x) => {
             return 'Cartão de Débito'
         case 'DP':
             return 'PIX'
-        case 'FO':
-            return 'Folha de Pagamento'
-        case 'VE':
-            return 'Voucher Exagerado'
+        case 'FI':
+            return 'Financiamento'
     }
 }
 
