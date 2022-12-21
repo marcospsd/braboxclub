@@ -1,8 +1,9 @@
-import React from 'react'
-import { DataGrid } from '@mui/x-data-grid';
+import React, { useState } from 'react'
+import { DataGrid, ptBR } from '@mui/x-data-grid';
+import {Button} from '@mui/material'
 import { useAxios } from '../../services/api';
 import {FormatReal, FormatTel} from '../Functions'
-import { BigConteiner } from './styles'
+import { BigContainer, Container, Bloco, Painel } from './styles'
 
  
 const columns = [
@@ -23,15 +24,34 @@ const columns = [
 
 const VendasViewList = () => {
     const { data } = useAxios('/vendas/vendas')
+    const [ row, setRow ] = useState({})
 
-
+    console.log(row)
     return (
-        <BigConteiner>
-        
-        { data && 
-          <DataGrid rows={data} columns={columns} />
-        }
-        </BigConteiner>
+        <BigContainer>
+          <DataGrid initialState={{ pagination: { pageSize: 20 }}}
+                    loading={data ? false : true}
+                    style={{ width: '100%'}} 
+                    rows={data ? data : []} 
+                    columns={columns} 
+                    localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
+                    getRowId={row => row.id}
+                    onSelectionModelChange={itm => setRow(itm[0])}
+                    />
+          <Container>
+            <Painel>
+              <Bloco>
+                <b>Faturamento</b>
+                <b>R$ 500,00</b>
+              </Bloco>
+              <Bloco>
+                <b>Quantidade de Vendas</b>
+                <b>50</b>
+              </Bloco>
+            </Painel>
+            <hr/>
+          </Container>
+        </BigContainer>
     )
 }
 
