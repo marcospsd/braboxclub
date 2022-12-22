@@ -23,6 +23,13 @@ export const AuthProvicer = ({children}) => {
                 setUser(res.data)
                 setLoading(false)
             })
+            .catch((err) => {
+                setLoading(false)
+                api.defaults.headers.Authorization = null
+            })
+        } else {
+            setLoading(false)
+            api.defaults.headers.Authorization = null
         }
     }, []);
 

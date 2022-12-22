@@ -31,4 +31,5 @@ urlpatterns = [
     path('produtos/', include(prodrouter.urls)),
     path('produtos/', include('produtos.urls')),
     path('vendas/', include(vendasrouter.urls)),
+    path('vendas/', include('vendas.urls')),
 ]

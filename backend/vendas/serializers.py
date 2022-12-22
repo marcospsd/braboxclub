@@ -48,3 +48,12 @@ class VendaSerializer(serializers.ModelSerializer):
                                                 status = 'A')
                     vencimento = vencimento + timedelta(30)
         return user
+
+
+class ResumoSerializer(serializers.ModelSerializer):
+    total = serializers.IntegerField()
+    quantidade = serializers.IntegerField()
+
+    class Meta:
+        model = Vendas
+        fields = ['total', 'quantidade']
