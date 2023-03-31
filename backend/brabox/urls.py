@@ -20,6 +20,8 @@ from clientes.urls import clientrouter
 from financeiro.urls import finanrouter
 from produtos.urls import prodrouter
 from vendas.urls import vendasrouter
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +34,4 @@ urlpatterns = [
     path('produtos/', include('produtos.urls')),
     path('vendas/', include(vendasrouter.urls)),
     path('vendas/', include('vendas.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
