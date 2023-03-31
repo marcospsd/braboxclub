@@ -13,3 +13,11 @@ class CategoriaAdmin(admin.ModelAdmin):
 @admin.register(Marca)
 class MarcaAdmin(admin.ModelAdmin):
     list_display = ('nome',)
+
+@admin.register(Modelo)
+class ModeloAdmin(admin.ModelAdmin):
+    list_display = ('nome',)
+    
+@admin.register(Tamanho)
+class TamanhoAdmin(admin.ModelAdmin):
+    list_display = ('tamanho',)
